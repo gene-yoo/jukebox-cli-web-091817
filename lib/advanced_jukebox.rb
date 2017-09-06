@@ -14,16 +14,20 @@
 
 def help
   #this method should be the same as in jukebox.rb
-
+  puts "I accept the following commands:"
+  puts "- help : displays this help message"
+  puts "- list : displays a list of songs you can play"
+  puts "- play : lets you choose a song to play"
+  puts "- exit : exits this program"
 end
-
-
 
 def list(my_songs)
-  #this method is different! Collect the keys of the my_songs hash and 
+  #this method is different! Collect the keys of the my_songs hash and
   #list the songs by name
+  my_songs.keys.each do |name|
+    puts "#{name}"
+  end
 end
-
 
 def play(my_songs)
   #this method is slightly different!
@@ -33,13 +37,47 @@ def play(my_songs)
   #if it isn't, tell them their choice is invalid
   #if it is, play the song using the system 'open <file path>' syntax
   #get the file path of the song by looking it up in the my_songs hash
-  
+  puts "Please enter a song name or number:"
+  input = gets.chomp
+
+  if valid_song?(input, my_songs)
+      puts "Playing #{input}"
+      system "open #{my_songs[input]}"
+  else
+    puts "Invalid input, please try again"
+  end
+end
+
+def valid_song?(input, my_songs)
+  my_songs.keys.include?(input)
 end
 
 def exit_jukebox
   #this method is the same as in jukebox.rb
+  puts "Goodbye"
 end
 
 def run(my_songs)
   #this method is the same as in jukebox.rb
+  help
+  input = ""
+
+  while (input.downcase != "exit")
+    puts "Please enter a command:"
+    input = gets.chomp
+
+    case input.downcase
+    when "help"
+      help
+    when "list"
+      list(my_songs)
+    when "play"
+      play(my_songs)
+    when "exit"
+      exit_jukebox
+      break
+    else
+      puts "Invalid input, Please try again"
+    end
+  end
 end
